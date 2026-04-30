@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="output.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body
+    class="text-white h-full bg-black font-['Inter', sans-serif] w-full font-normal"
+  >
+    <!-- Header will hold navbar, logo, search and buttons (Signup and Login) -->
+    <header class="flex items-center py-1">
+      <!-- Nav bar  -->
+      <nav class="flex items-center w-full h-13 lg:mt-0">
+        <!-- Hamburger container -->
+        <div
+          class="pl-3 w-auto hamburger-container flex justify-center items-center lg:hidden"
+        >
+          <img
+            src="images/hamburger.svg"
+            alt="Logo"
+            class="invert h-11"
+            srcset=""
+          />
+        </div>
+
+        <!-- Logo container -->
+        <div
+          class="pl-3 w-auto logo-container flex justify-center items-center"
+        >
+          <img src="images/logo.svg" alt="Logo" class="invert h-11" srcset="" />
+        </div>
+
+        <!-- Search and buttons wrapper -->
+        <div class="search-and-buttons h-full w-full flex justify-between px-5">
+          <!-- Search and home container -->
+          <div
+            class="ml-1 md:ml-0 flex w-full h-full gap-2 p-1 md:w-[50vw] home-search-container"
+          >
+            <!-- Home Icon -->
+            <div
+              class="group hidden md:flex items-center justify-center p-2 home-container bg-[#1f1f1f] md:hover:bg-[#2a2a2a] w-11 h-11 rounded-full cursor-pointer transition-all duration-500"
+            >
+              <img
+                src="images/home-filled.svg"
+                alt="Home"
+                class="hidden transition-all duration-200 h-7 md:block md:group-hover:scale-110"
+              />
+            </div>
+
+            <!-- Search -->
+            <search
+              class="flex items-center md:w-[40vw] w-[70vw] bg-[#1f1f1f] md:hover:bg-[#2a2a2a] rounded-4xl p-3 transition-all duration-500 hover:border-[#d8d5d583] outline-none border border-transparent group"
+            >
+              <form
+                action="./search/"
+                class="w-full flex items-center justify-center gap-3"
+              >
+                <label
+                  for="search-input"
+                  class="flex items-center justify-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 640 640"
+                    class="transition-all duration-500 cursor-pointer h-7 fill-neutral-400 md:group-hover:fill-white md:group-hover:scale-110"
+                  >
+                    <path
+                      d="M480 272C480 317.9 465.1 360.3 440 394.7L566.6 521.4C579.1 533.9 579.1 554.2 566.6 566.7C554.1 579.2 533.8 579.2 521.3 566.7L394.7 440C360.3 465.1 317.9 480 272 480C157.1 480 64 386.9 64 272C64 157.1 157.1 64 272 64C386.9 64 480 157.1 480 272zM272 416C351.5 416 416 351.5 416 272C416 192.5 351.5 128 272 128C192.5 128 128 192.5 128 272C128 351.5 192.5 416 272 416z"
+                    />
+                  </svg>
+                </label>
+                <input
+                  type="search"
+                  id="search-input"
+                  placeholder="Search the song you want"
+                  class="w-full text-l outline-none h-7 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-cancel-button]:h-4 [&::-webkit-search-cancel-button]:w-4 [&::-webkit-search-cancel-button]:bg-[url('images/close.svg')] [&::-webkit-search-cancel-button]:bg-contain [&::-webkit-search-cancel-button]:bg-no-repeat [&::-webkit-search-cancel-button]:invert [&::-webkit-search-cancel-button]:cursor-pointer"
+                />
+              </form>
+            </search>
+          </div>
+
+          <!-- Sign up and Log in buttons -->
+          <div class="button-container flex h-12 gap-2">
+            <button
+              class="sign-up hidden md:block cursor-pointer w-35 rounded-4xl h-full bg-[#1f1f1f] hover:bg-[#2a2a2a] transition-all duration-400 text-[18px] font-medium hover:font-bold px-8"
+            >
+              Sign up
+            </button>
+            <button
+              class="log-in hidden md:block cursor-pointer w-35 rounded-4xl h-full bg-[#ffffff] text-black transition-all duration-400 text-[18px] hover:font-bold font-medium px-8"
+            >
+              Log in
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main has 2 containers left and right to hold playist and songs -->
+    <main
+      class="text-white md:h-[89vh] h-[90vh] lg:h-[89vh] bg-black font-['Inter', sans-serif] w-full font-normal md:gap-1 mt-1"
+    >
+      <!-- Left and Right container wrapper -->
+      <div class="left-right-wrapper flex h-full w-full lg:gap-2">
+        <!-- Left container -->
+        <div
+          class="bg-[#121212] left hidden lg:block fixed top-0 h-full lg:w-[30%] w-full lg:rounded-[10px] lg:relative px-2"
+        >
+          <!-- YourLibrary Heading and close sidebar button-->
+          <div
+            class="your-library-and-close-sidebar w-full h-[15%] flex justify-between items-center px-1"
+          >
+            <!-- Your library heading -->
+            <div
+              class="your-library-heading h-full flex items-center rounded-[10px]"
+            >
+              <h2 class="font-bold pl-5 text-xl sm:text-[40px] lg:text-xl">
+                Your Library
+              </h2>
+            </div>
+
+            <!-- Close sidebar -->
+            <div
+              class="close-sidebar-image-container lg:hidden w-10 h-10 sm:w-14 sm:h-14"
+            >
+              <img
+                class="invert w-[90%] h-[90%]"
+                src="images/close.svg"
+                alt=""
+                srcset=""
+              />
+            </div>
+          </div>
+
+          <!-- Song card container -->
+          <div
+            class="playlist-songs p-2 lg:p-2 sm:px-10 h-[70%] w-full overflow-y-auto scrollbar-dark flex flex-col bg-black gap-x-1"
+          >
+            <!-- Single song card -->
+            <div
+              class="cursor-pointer song-card w-full h-17 lg:h-17 sm:h-25 p-1 flex items-center bg-[#121212] justify-evenly rounded-[10px] hover:bg-[#333333] transition-all duration-500"
+            >
+              <!-- Song image -->
+              <div
+                class="song-image-container w-[15%] flex justify-center items-center"
+              >
+                <img
+                  class="w-12 h-12 rounded-full"
+                  src="https://media.wired.com/photos/633b6824f9c0de49c193489f/3:2/w_1600,c_limit/streamers-playlist-music-industry.jpg"
+                  alt=""
+                  srcset=""
+                />
+              </div>
+
+              <!-- Song Name -->
+              <div
+                class="song-name h-12 lg:h-12 sm:h-15 w-[65%] text-gray-400 overflow-x-clip overflow-y-hidden text-[14px] font-semibold"
+              >
+                <p
+                  class="line-clamp-2 wrap-break-word text-[16px] lg:text-[16px] sm:text-[18px]"
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Quasi laborum animi, numquam libero
+                </p>
+              </div>
+
+              <!-- Play music svg -->
+              <div
+                class="play-music-svg w-[15%] flex justify-center items-center"
+              >
+                <img
+                  class="w-12 h-12 rounded-full invert active:scale-[105%] transition-all duration-300 cursor-pointer"
+                  src="images/play-music.svg"
+                  alt=""
+                  srcset=""
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- About us container -->
+          <div
+            class="about-us text-[12px] lg:text-[12px] sm:text-[20px] font-bold flex justify-start lg:justify-start sm:justify-center content-center px-1 gap-x-3 gap-y-3 h-[15%] w-full wrap-break-word flex-wrap text-[#b3b3b3] overflow-y-auto scrollbar-dark"
+          >
+            <div><a href="https://www.spotify.com/in-en/legal/">Legal</a></div>
+
+            <div>
+              <a href="https://www.spotify.com/in-en/safetyandprivacy/"
+                >Safety & Privacy Center</a
+              >
+            </div>
+            <div>
+              <a href="https://www.spotify.com/in-en/legal/privacy-policy/"
+                >Privacy Policy</a
+              >
+            </div>
+            <div>
+              <a href="https://www.spotify.com/in-en/legal/cookies-policy/"
+                >Cookies</a
+              >
+            </div>
+            <div>
+              <a href="https://www.spotify.com/in-en/legal/privacy-policy/#s3"
+                >About Ads</a
+              >
+            </div>
+            <div>
+              <a href="https://www.spotify.com/in-en/accessibility/"
+                >Accessibility</a
+              >
+            </div>
+            <div>
+              <a
+                href="https://www.spotify.com/legal/cookies-policy/"
+                target="_blank"
+                rel="noopener"
+                >Cookies</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Right container -->
+        <div
+          class="bg-[#121212] right w-full lg:w-[70%] h-full rounded-[10px] p-3 overflow-y-auto relative"
+        >
+          <!-- Right Heading -->
+          <div
+            class="h-[5%] flex justify-start items-center right-heading w-full"
+          >
+            <h2 class="pl-3 lg:text-2xl text-xl sm:text-3xl font-bold">
+              Spotify Playlists
+            </h2>
+          </div>
+
+          <!-- Playlist cards container -->
+          <div
+            class="playlists-cards-container w-full h-[75%] mt-2 flex gap-3 p-1 flex-wrap overflow-auto scrollbar-dark "
+          >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- Single playlist card OG -->
+
+            <div
+              class="h-fit playlist-card lg:w-38 w-45 flex flex-col cursor-pointer transition-all duration-150 group pb-1 relative before:content-[''] before:absolute before:h-0 hover:before:h-full before:transition-all before:duration-500 before:w-full before:bottom-0 before:bg-white before:rounded-[10px]"
+            >
+              <!-- Cover image container -->
+              <div
+                class="card-container-image relative w-full flex justify-center items-center h-fit p-2 rounded-[10px]"
+              >
+                <img
+                  class="relative z-1 cover-image w-full object-contain transform rounded-[10px] duration-1000 ease-out group-hover:scale-[105%]"
+                  src="https://i.scdn.co/image/ab67616d00001e02ad214fc33b05facb1e527b98"
+                  alt=""
+                  srcset=""
+                />
+
+                <div
+                  class="play-animation-image w-[30%] absolute -bottom-[2%] group-hover:bottom-[10%] right-2 cursor-pointer transition-all duration-300 opacity-0 group-hover:opacity-100"
+                >
+                  <svg
+                    viewBox="0 0 640 640"
+                    class="w-full h-full group-hover:scale-[110%]"
+                  >
+                    <!-- Circle (green) -->
+                    <circle
+                      cx="320"
+                      cy="320"
+                      r="256"
+                      class="fill-[#1ed760] group-hover:fill-[#3be477] transition-colors duration-300"
+                    />
+
+                    <!-- Triangle (black) -->
+                    <path
+                      d="M276.6 211.4C269.2 206.9 259.9 206.7 252.3 210.9C244.7 215.3 240 223.4 240 232V408C240 416.7 244.7 424.7 252.3 428.9C259.9 433.1 269.1 433 276.6 428.4L420.6 340.4C427.7 336 432.1 328.3 432.1 319.9C432.1 311.5 427.7 303.8 420.6 299.4L276.6 211.4Z"
+                      class="fill-black"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Playlist title -->
+              <div class="w-[90%] playlist-title p-1 h-fit z-1">
+                <h3
+                  class="text-sm lg:text-lg sm:text-xl pl-3  font-semibold group-hover:text-black transition-all delay-100 line-clamp-2 wrap-break-word"
+                >
+                  Majboor
+                </h3>
+              </div>
+
+              <!-- Playlist description -->
+              <div class="w-[90%] playlist-description p-1 h-fit z-1">
+                <p
+                  class="font-semibold text-gray-400 lg:text-[13px] text-[10px] sm:text-[14px] pl-3 group-hover:text-gray-700 transition-all delay-100 line-clamp-2 wrap-break-word"
+                >
+                  Calm your Anger 111111111111111111111111 2222222222222222
+                </p>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+          </div>
+
+          <!-- Playbar -->
+          <div
+            class="playbar h-[18%] md-h-[18%] bg-[#333333] rounded-[10px] relative z-1 bottom-0 w-full"
+          >
+            <!-- song-info-and-play-buttons-container -->
+            <div
+              class="song-info-and-play-buttons-container w-full h-[70%] flex justify-between items-center rounded-[10px] flex-col md:flex-row box-border px-5"
+            >
+              <!-- Song name -->
+              <div
+                class="song-name md:w-[50%] w-[90%] pl-1 md:h-full h-[33%] overflow-hidden relative flex items-center"
+              >
+                <p
+                  class="whitespace-nowrap font-semibold animate-marquee leading-none"
+                >
+                  Hello I am here to judge you while you are doing a great job
+                  here you are watching it
+                </p>
+              </div>
+
+              <!-- Play buttons -->
+              <div
+                class="md:h-full h-[33%] play-buttons w-[30%] flex items-center justify-center p-2 box-border gap-1"
+              >
+                <!-- Previous -->
+                <div
+                  class="previous md:w-12 md:h-12 w-7 h-7 md:hover:bg-[#70707098] transition-all duration-500 flex justify-center items-center rounded-full"
+                >
+                  <img
+                    class="w-[90%] h-[90%] invert cursor-pointer transform"
+                    src="images/previous.svg"
+                    alt="Previous Song"
+                    srcset=""
+                  />
+                </div>
+
+                <!-- Play and pause -->
+                <div
+                  class="play-pause md:w-12 md:h-12 w-7 h-7 md:hover:bg-[#70707098] transition-all duration-500 flex justify-center items-center rounded-full"
+                >
+                  <img
+                    class="w-[90%] h-[90%] invert cursor-pointer transform"
+                    src="images/play-music.svg"
+                    alt="Play-Pause Song"
+                    srcset=""
+                  />
+                </div>
+
+                <!-- Next -->
+                <div
+                  class="next md:w-12 md:h-12 w-7 h-7 md:hover:bg-[#70707098] transition-all duration-500 flex justify-center items-center rounded-full"
+                >
+                  <img
+                    class="w-[90%] h-[90%] invert cursor-pointer"
+                    src="images/next.svg"
+                    alt="Next Song"
+                    srcset=""
+                  />
+                </div>
+              </div>
+
+              <!-- Volume and Song Duration -->
+              <div
+                class="volume-and-song-duration md:w-[50%] w-full md:h-full h-[33%] flex items-center justify-start md:justify-between box-border"
+              >
+                <!-- Volume container -->
+                <div
+                  class="md:h-full volume-container md:w-[60%] w-[60%] flex justify-start items-center gap-2 pl-2"
+                >
+                  <!-- Volume image container -->
+                  <div
+                    class="volume-image-container md:w-12 md:h-12 w-7 h-7 md:hover:bg-[#70707098] transition-all duration-500 flex justify-center items-center rounded-full"
+                  >
+                    <img
+                      class="volume-image w-[90%] h-[90%] invert cursor-pointer"
+                      src="images/volume-medium.svg"
+                      alt="volume image"
+                    />
+                  </div>
+
+                  <!-- Volume range container -->
+                  <div
+                    class="volume-range w-[60%] flex justify-center items-center"
+                  >
+                    <input
+                      class="w-full custom-range"
+                      type="range"
+                      name="volume"
+                      id=""
+                    />
+                  </div>
+                </div>
+
+                <!-- Song duration container -->
+                <div
+                  class="song-duration-container font-bold flex justify-end items-center w-[40%] h-full"
+                >
+                  19:44 / 23:44
+                </div>
+              </div>
+            </div>
+
+            <!-- Seekbar container -->
+            <div
+              class="seekbar-container h-[30%] rounded-[10px] box-border p-2 w-full flex justify-center items-center"
+            >
+              <!-- Seekbar track -->
+              <div
+                class="seekbar-track transition-all duration-500 w-[95%] h-1.5 bg-white rounded-full flex items-center cursor-pointer hover:h-2"
+              >
+                <!-- Seekbar pointer -->
+                <div
+                  class="seekbar-pointer w-4 h-4 bg-white rounded-full cursor-pointer transition-all duration-300"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

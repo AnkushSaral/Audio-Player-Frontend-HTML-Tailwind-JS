@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+
+@layer utilities {
+  
+
+  .scrollbar-dark::-webkit-scrollbar {
+    width: 8px;
+  }
+  .scrollbar-dark::-webkit-scrollbar-button {
+  display: none; /* works only in some older engines */
+}
+
+  .scrollbar-dark::-webkit-scrollbar-track {
+    background: #171717; /* neutral-900 */
+  }
+
+  .scrollbar-dark::-webkit-scrollbar-thumb {
+    background: #404040; /* neutral-700 */
+    border-radius: 9999px;
+    border: 2px solid #171717;
+    transition: background 0.2s;
+  }
+
+  .scrollbar-dark::-webkit-scrollbar-thumb:hover {
+    background: #737373; /* neutral-500 */
+  }
+
+  /* Firefox */
+  .scrollbar-dark {
+    scrollbar-width: thin;
+    scrollbar-color: #404040 #171717;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 10s linear infinite;
+}
+
+
+
+
+.custom-range {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+/* Track */
+.custom-range::-webkit-slider-runnable-track {
+  height: 6px;
+  background: #22c55e;
+  border-radius: 999px;
+  cursor: pointer
+}
+
+/* Thumb default */
+.custom-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  background: #16a34a;
+  border-radius: 50%;
+  margin-top: -5px;
+  cursor: pointer;
+}
+
+/* Hover */
+.custom-range:hover::-webkit-slider-thumb {
+  background: #15803d;
+  cursor: pointer
+}
+
+/* Active (when dragging) */
+.custom-range:active::-webkit-slider-thumb {
+  background: #14532d;
+  cursor: pointer
+}
