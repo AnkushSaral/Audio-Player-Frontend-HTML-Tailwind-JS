@@ -232,6 +232,15 @@
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
+  .mt-3 {
+    margin-top: calc(var(--spacing) * 3);
+  }
+  .mt-4 {
+    margin-top: calc(var(--spacing) * 4);
+  }
+  .mb-1 {
+    margin-bottom: calc(var(--spacing) * 1);
+  }
   .ml-1 {
     margin-left: calc(var(--spacing) * 1);
   }
@@ -264,6 +273,12 @@
   }
   .h-7 {
     height: calc(var(--spacing) * 7);
+  }
+  .h-8 {
+    height: calc(var(--spacing) * 8);
+  }
+  .h-9 {
+    height: calc(var(--spacing) * 9);
   }
   .h-10 {
     height: calc(var(--spacing) * 10);
@@ -318,6 +333,12 @@
   }
   .w-7 {
     width: calc(var(--spacing) * 7);
+  }
+  .w-8 {
+    width: calc(var(--spacing) * 8);
+  }
+  .w-9 {
+    width: calc(var(--spacing) * 9);
   }
   .w-10 {
     width: calc(var(--spacing) * 10);
@@ -418,6 +439,9 @@
   .gap-x-3 {
     column-gap: calc(var(--spacing) * 3);
   }
+  .gap-y-1 {
+    row-gap: calc(var(--spacing) * 1);
+  }
   .gap-y-3 {
     row-gap: calc(var(--spacing) * 3);
   }
@@ -439,11 +463,18 @@
   .rounded-4xl {
     border-radius: var(--radius-4xl);
   }
+  .rounded-\[5px\] {
+    border-radius: 5px;
+  }
   .rounded-\[10px\] {
     border-radius: 10px;
   }
   .rounded-full {
     border-radius: calc(infinity * 1px);
+  }
+  .rounded-b-\[10px\] {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
   }
   .border {
     border-style: var(--tw-border-style);
@@ -451,9 +482,6 @@
   }
   .border-transparent {
     border-color: transparent;
-  }
-  .border-white {
-    border-color: var(--color-white);
   }
   .bg-\[\#1f1f1f\] {
     background-color: #1f1f1f;
@@ -1120,9 +1148,9 @@
       appearance: none;
     }
   }
-  .\[\&\:\:-webkit-search-cancel-button\]\:bg-\[url\(\'images\/close\.svg\'\)\] {
+  .\[\&\:\:-webkit-search-cancel-button\]\:bg-\[url\(\'\.\.\/images\/close\.svg\'\)\] {
     &::-webkit-search-cancel-button {
-      background-image: url('images/close.svg');
+      background-image: url('../images/close.svg');
     }
   }
   .\[\&\:\:-webkit-search-cancel-button\]\:bg-contain {

@@ -83,7 +83,7 @@
                   type="search"
                   id="search-input"
                   placeholder="Search the song you want"
-                  class="w-full text-l outline-none h-7 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-cancel-button]:h-4 [&::-webkit-search-cancel-button]:w-4 [&::-webkit-search-cancel-button]:bg-[url('images/close.svg')] [&::-webkit-search-cancel-button]:bg-contain [&::-webkit-search-cancel-button]:bg-no-repeat [&::-webkit-search-cancel-button]:invert [&::-webkit-search-cancel-button]:cursor-pointer"
+                  class="w-full text-l outline-none h-7 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-cancel-button]:h-4 [&::-webkit-search-cancel-button]:w-4 [&::-webkit-search-cancel-button]:bg-[url('../images/close.svg')] [&::-webkit-search-cancel-button]:bg-contain [&::-webkit-search-cancel-button]:bg-no-repeat [&::-webkit-search-cancel-button]:invert [&::-webkit-search-cancel-button]:cursor-pointer"
                 />
               </form>
             </search>
@@ -144,7 +144,7 @@
 
           <!-- Song card container -->
           <div
-            class="playlist-songs p-2 lg:p-2 sm:px-10 h-[70%] w-full overflow-y-auto scrollbar-dark flex flex-col bg-black gap-x-1"
+            class="playlist-songs p-2 lg:p-2 sm:px-10 h-[70%] w-full overflow-y-auto scrollbar-dark flex flex-col bg-black gap-x-1 gap-y-1"
           >
             <!-- Single song card -->
             <div
@@ -155,8 +155,8 @@
                 class="song-image-container w-[15%] flex justify-center items-center"
               >
                 <img
-                  class="w-12 h-12 rounded-full"
-                  src="https://media.wired.com/photos/633b6824f9c0de49c193489f/3:2/w_1600,c_limit/streamers-playlist-music-industry.jpg"
+                  class="w-11 h-11 rounded-full"
+                  src="images/music.jpg"
                   alt=""
                   srcset=""
                 />
@@ -427,5 +427,12 @@
         </div>
       </div>
     </main>
+
+
+
+
+<!-- Adding the script file -->
+ <script type="module" src="script/main.js"></script>
+
   </body>
 </html>
