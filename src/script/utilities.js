@@ -153,8 +153,15 @@ export let displayPlaylists = async (
   playListFolderName,
   playlistsCardContainerElement,
   basePath,
+  songCardContainer,
+  songList
 ) => {
+
+  // Clearing the playlist card container element
   playlistsCardContainerElement.innerHTML = "";
+
+  // This is to check wheather it's first playlist or not after we will load the songs of first playlist at the start
+  let isFirstPlaylist = true;
 
   // Fetching the folder names
   let response = await fetch(`${basePath}/${playListFolderName}/`);
@@ -166,7 +173,7 @@ export let displayPlaylists = async (
 
   let anchors = div.querySelectorAll("a");
 
-  Array.from(anchors).forEach(async (anchor) => {
+  for (const anchor of Array.from(anchors)){
     if (anchor.href.includes("%5C") && !anchor.href.endsWith(".htaccess")) {
       // Getting current folder name
       let currentFolder = anchor.href.split("%5C").pop();
@@ -195,7 +202,40 @@ export let displayPlaylists = async (
         ".playlist-description > p",
       ).textContent = `${playListDescription}`;
 
+      //Adding event listner to the singlePlayListCard so when it clicked we can load the songs of this playlist
+      singlePlayListCard.addEventListener("click", async (e) => {
+        await displayFolderSongs(
+          "playlists",
+          currentFolder,
+          songCardContainer,
+          songList,
+          basePath,
+        );
+      });
+
+      
+      // Adding the single playlist card to playlist card container
       playlistsCardContainerElement.appendChild(singlePlayListCard);
+
+      // If it's the first playlist then we will load it's songs in the start
+      if (isFirstPlaylist) {
+        console.log(isFirstPlaylist)
+        // Loading the playlist songs
+        await displayFolderSongs(
+          "playlists",
+          currentFolder,
+          songCardContainer,
+          songList,
+          basePath,
+        );
+
+        isFirstPlaylist = false;
+
+      };
+
+
+
+
     }
-  });
+  };
 };

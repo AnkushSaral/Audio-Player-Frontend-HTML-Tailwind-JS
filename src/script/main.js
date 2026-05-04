@@ -8,15 +8,14 @@ let els = {
 };
 
 async function onLoad() {
-  await displayFolderSongs(
-    "playlists",
-    "Diljit",
-    els.songCardContainer,
-    els.songList,
-    els.basePath,
-  );
+  
+  
 
-  await displayPlaylists("playlists", els.playlistsCardContainer, els.basePath);
+  await displayPlaylists("playlists", els.playlistsCardContainer, els.basePath, els.songCardContainer, els.songList);
+
+
+
+
 }
 
 onLoad();
