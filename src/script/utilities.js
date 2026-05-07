@@ -10,6 +10,9 @@ export class CurrentSong {
     this.isProcessing = false;
 
     this.songNameElement = document.querySelector(".song-name > p");
+    this.volumeImageElement = document.querySelector(
+      ".volume-image-container > img",
+    );
 
     this.playPauseButtonElement = document.querySelector(
       ".play-buttons .play-pause > img",
@@ -80,6 +83,40 @@ export class CurrentSong {
 
   getDetails() {
     return [this.songName, this.songURL];
+  }
+
+
+  //This function will change the volume
+  async changeVolume(newVolume) {
+
+    
+    if (this.isProcessing) return;
+    try {
+      this.isProcessing = true;
+      this.audio.volume = newVolume;
+
+      if (newVolume == 0) {
+        this.volumeImageElement.src = "images/volume-mute.svg";
+      } else if (newVolume > 0 && newVolume <= 0.3) {
+        this.volumeImageElement.src = "images/volume-low.svg";
+      } else if (newVolume > 0.3 && newVolume <= 0.8) {
+        this.volumeImageElement.src = "images/volume-medium.svg";
+      } else if (newVolume > 0.8 && newVolume <= 1) {
+        this.volumeImageElement.src = "images/volume-high.svg";
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      // Release lock
+      this.isProcessing = false;
+    }
+  }
+
+
+
+  //This function will return the volume
+  getVolume(){
+    return this.audio.volume;
   }
 }
 

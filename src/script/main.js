@@ -13,6 +13,8 @@ let els = {
   previousButton: document.querySelector(".play-buttons .previous > img"),
   playPauseButton: document.querySelector(".play-buttons .play-pause > img"),
   nextButton: document.querySelector(".play-buttons .next > img"),
+  volumeImage: document.querySelector(".volume-image-container > img"),
+  volumeRange: document.querySelector(".volume-range > input"),
 
   basePath: "http://127.0.0.1:3000/src",
 
@@ -42,6 +44,8 @@ async function onLoad() {
     nextButton,
     currentSong,
     songList,
+    volumeImage,
+    volumeRange,
   ) => {
     // Adding Eventlistner to the playPauseButton
     playPauseButton.addEventListener("click", async (e) => {
@@ -68,6 +72,8 @@ async function onLoad() {
       }
     });
 
+
+
     // Adding Eventlistner to the nextButton
     nextButton.addEventListener("click", async (e) => {
       await currentSong.pause();
@@ -83,6 +89,49 @@ async function onLoad() {
         }
       }
     });
+
+
+
+    // Adding Eventlistner to the volumeRange
+    volumeRange.addEventListener("input", async (e) => {
+          await currentSong.changeVolume(e.target.value/100);
+    });
+    
+    
+    // Adding Eventlistner to the volumeImage
+    volumeImage.addEventListener("click", async (e) => {
+        if (currentSong.getVolume() == 0) {
+          await currentSong.changeVolume(0.2)
+          volumeRange.value = 20;
+        }
+        else{
+          
+          await currentSong.changeVolume(0)
+          volumeRange.value = 0;
+
+        }
+
+
+          
+          
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   };
 
   await playbarEventHandling(
@@ -92,6 +141,8 @@ async function onLoad() {
     els.nextButton,
     currentSong,
     els.songList,
+    els.volumeImage,
+    els.volumeRange,
   );
 }
 
