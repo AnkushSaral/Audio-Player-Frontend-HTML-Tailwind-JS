@@ -1,3 +1,88 @@
+// Audio class will help us to play, pause and interact with audio
+export class CurrentSong {
+  constructor() {
+    this.audio = new Audio();
+
+    this.songName = "";
+    this.songURL = "";
+
+    // LOCK
+    this.isProcessing = false;
+
+    this.songNameElement = document.querySelector(".song-name > p");
+
+    this.playPauseButtonElement = document.querySelector(
+      ".play-buttons .play-pause > img",
+    );
+  }
+
+  async play() {
+    // Prevent overlapping execution
+    if (this.isProcessing) return;
+
+    try {
+      this.isProcessing = true;
+
+      await this.audio.play();
+
+      this.playPauseButtonElement.src = "images/pause-music.svg";
+    } catch (error) {
+      console.error("Play error:", error);
+    } finally {
+      // Release lock
+      this.isProcessing = false;
+    }
+  }
+
+  async pause() {
+    // Prevent overlapping execution
+    if (this.isProcessing) return;
+
+    try {
+      this.isProcessing = true;
+
+      this.audio.pause();
+
+      this.playPauseButtonElement.src = "images/play-music.svg";
+    } catch (error) {
+      console.error("Pause error:", error);
+    } finally {
+      // Release lock
+      this.isProcessing = false;
+    }
+  }
+
+  async togglePlayPause() {
+    if (this.isProcessing) return;
+
+    if (this.audio.paused) {
+      await this.play();
+    } else {
+      await this.pause();
+    }
+  }
+
+  changeTrack(track) {
+    // Optional safety
+    if (this.isProcessing) return;
+
+    this.songName = track[0];
+    this.songURL = track[1];
+
+    this.audio.src = this.songURL;
+
+    this.songNameElement.textContent = this.songName;
+  }
+
+  getStatus() {
+    return this.audio.paused ? "paused" : "playing";
+  }
+
+  getDetails() {
+    return [this.songName, this.songURL];
+  }
+}
+
 // Single song card template
 let singleSongCardTemplate = ` <!-- Single song card -->
             <div
@@ -46,8 +131,12 @@ export let displayFolderSongs = async (
   songCardContainer,
   songsList,
   basePath,
+  currentSong,
 ) => {
   songCardContainer.innerHTML = "";
+
+  // Clear old songs
+  songsList.length = 0;
 
   // Fetching the files inside the given folder
   let response = await fetch(
@@ -80,12 +169,21 @@ export let displayFolderSongs = async (
       singleSongCard.querySelector(".song-name  p").textContent = songName;
       singleSongCard.querySelector(".play-music-svg").dataset.song = songURL;
 
+      //Adding song play event listner to songCard
+      singleSongCard.addEventListener("click", async (e) => {
+        currentSong.changeTrack([songName, songURL]);
+        await currentSong.play();
+      });
+
       songCardContainer.appendChild(singleSongCard);
 
       // Adding song name and song URL as element in songList
       songsList.push([songName, songURL]);
     }
   });
+
+  currentSong.changeTrack(songsList[0]);
+  console.log(songsList[0]);
 };
 
 // Single playlist card template
@@ -96,17 +194,17 @@ let playListCardTemplate = ` <!-- Single playlist card OG -->
             >
               <!-- Cover image container -->
               <div
-                class="card-container-image relative w-full flex justify-center items-center h-fit p-2 rounded-[10px]"
+                class="card-container-image relative w-full flex justify-center items-center h-fit p-2 rounded-[10px] overflow-hidden"
               >
                 <img
-                  class="relative z-1 cover-image w-full object-contain transform rounded-[10px] duration-1000 ease-out group-hover:scale-[105%]"
+                  class="relative z-0 cover-image w-full object-contain transform rounded-[10px] duration-1000 ease-out group-hover:scale-[105%]"
                   src="https://i.scdn.co/image/ab67616d00001e02ad214fc33b05facb1e527b98"
                   alt=""
                   srcset=""
                 />
 
                 <div
-                  class="play-animation-image w-[30%] absolute -bottom-[2%] group-hover:bottom-[10%] right-2 cursor-pointer transition-all duration-300 opacity-0 group-hover:opacity-100"
+                  class="play-animation-image w-[30%] absolute -bottom-[2%] group-hover:bottom-[10%] right-2 cursor-pointer transition-all duration-300 opacity-0 group-hover:opacity-100 z-10"
                 >
                   <svg
                     viewBox="0 0 640 640"
@@ -154,9 +252,9 @@ export let displayPlaylists = async (
   playlistsCardContainerElement,
   basePath,
   songCardContainer,
-  songList
+  songList,
+  currentSong,
 ) => {
-
   // Clearing the playlist card container element
   playlistsCardContainerElement.innerHTML = "";
 
@@ -173,7 +271,7 @@ export let displayPlaylists = async (
 
   let anchors = div.querySelectorAll("a");
 
-  for (const anchor of Array.from(anchors)){
+  for (const anchor of Array.from(anchors)) {
     if (anchor.href.includes("%5C") && !anchor.href.endsWith(".htaccess")) {
       // Getting current folder name
       let currentFolder = anchor.href.split("%5C").pop();
@@ -204,22 +302,22 @@ export let displayPlaylists = async (
 
       //Adding event listner to the singlePlayListCard so when it clicked we can load the songs of this playlist
       singlePlayListCard.addEventListener("click", async (e) => {
+        currentSong.pause();
         await displayFolderSongs(
           "playlists",
           currentFolder,
           songCardContainer,
           songList,
           basePath,
+          currentSong,
         );
       });
 
-      
       // Adding the single playlist card to playlist card container
       playlistsCardContainerElement.appendChild(singlePlayListCard);
 
       // If it's the first playlist then we will load it's songs in the start
       if (isFirstPlaylist) {
-        console.log(isFirstPlaylist)
         // Loading the playlist songs
         await displayFolderSongs(
           "playlists",
@@ -227,15 +325,26 @@ export let displayPlaylists = async (
           songCardContainer,
           songList,
           basePath,
+          currentSong,
         );
 
         isFirstPlaylist = false;
-
-      };
-
-
-
-
+      }
     }
-  };
+  }
+};
+
+export let sidebarOpenCloseEventHandling = async (
+  hamburgerElement,
+  closeSidebarElement,
+) => {
+  hamburgerElement.addEventListener("click", (e) => {
+    document.querySelector(".left").classList.remove("hidden");
+    document.querySelector(".right").classList.add("hidden");
+  });
+
+  closeSidebarElement.addEventListener("click", (e) => {
+    document.querySelector(".left").classList.add("hidden");
+    document.querySelector(".right").classList.remove("hidden");
+  });
 };

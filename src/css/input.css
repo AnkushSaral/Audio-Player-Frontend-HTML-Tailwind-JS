@@ -1,29 +1,29 @@
 @import "tailwindcss";
 
-
 @layer utilities {
-  
-
   .scrollbar-dark::-webkit-scrollbar {
     width: 8px;
   }
+
   .scrollbar-dark::-webkit-scrollbar-button {
-  display: none; /* works only in some older engines */
-}
+    display: none;
+    width: 0;
+    height: 0;
+    background: transparent;
+  }
 
   .scrollbar-dark::-webkit-scrollbar-track {
-    background: #171717; /* neutral-900 */
+    background: #171717;
   }
 
   .scrollbar-dark::-webkit-scrollbar-thumb {
-    background: #404040; /* neutral-700 */
+    background: #404040;
     border-radius: 9999px;
     border: 2px solid #171717;
-    transition: background 0.2s;
   }
 
   .scrollbar-dark::-webkit-scrollbar-thumb:hover {
-    background: #737373; /* neutral-500 */
+    background: #737373;
   }
 
   /* Firefox */
