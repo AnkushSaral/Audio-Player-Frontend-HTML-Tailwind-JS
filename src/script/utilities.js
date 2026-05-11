@@ -9,7 +9,6 @@ export class CurrentSong {
     // LOCK
     this.isProcessing = false;
 
-
     //Getting DOM elements
     this.songNameElement = document.querySelector(".song-name > p");
     this.volumeImageElement = document.querySelector(
@@ -21,46 +20,37 @@ export class CurrentSong {
     );
 
     this.duration = document.querySelector(".song-duration-container");
+    this.seekbarPointer = document.querySelector(".seekbar-pointer");
+
+    //Adding a time update event listner to update the duration and current time and seekbar pointer
+    this.audio.addEventListener("timeupdate", (event) => {
+      if (this.audio.currentTime == this.audio.duration){
+        this.pause();
+      }
 
 
+      // Updating current time
+      this.duration.textContent = `${this.format(this.audio.currentTime)} / ${this.format(this.audio.duration)}`;
 
-
-    
-   
-
-    
-
-
-    //Adding a time update event listner to track the duration
-  this.audio.addEventListener("timeupdate", (event) => { 
-
-
-    this.duration.textContent = `${this.format(this.audio.currentTime)} / ${this.format(this.audio.duration)}`;
-})
-
-
-
-
+      // Updating seekbar pointer
+      this.seekbarPointer.style.left = `${(this.audio.currentTime / this.audio.duration) * 100}%`;
+    });
   }
 
-
-
   //This function will format the  timestamp to 00:00/00:00 format
- format(time) {
-  if (isNaN(time)) return "0:00";
+  format(time) {
+    if (isNaN(time)) return "0:00";
 
-  const minutes = Math.floor(time / 60);
-  const seconds = Math.floor(time % 60)
-    .toString()
-    .padStart(2, "0");
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60)
+      .toString()
+      .padStart(2, "0");
 
-  return `${minutes}:${seconds}`;
-}
+    return `${minutes}:${seconds}`;
+  }
 
-
-  
-//This function will play the current song
-async play() {
+  //This function will play the current song
+  async play() {
     // Prevent overlapping execution
     if (this.isProcessing) return;
 
@@ -77,7 +67,6 @@ async play() {
       this.isProcessing = false;
     }
   }
-
 
   //This function will pause the current song
   async pause() {
@@ -98,7 +87,6 @@ async play() {
     }
   }
 
-
   // This function will toggle the play and pause
   async togglePlayPause() {
     if (this.isProcessing) return;
@@ -109,7 +97,6 @@ async play() {
       await this.pause();
     }
   }
-
 
   // This function will change the track of audio
   changeTrack(track) {
@@ -125,15 +112,13 @@ async play() {
     this.audio.load();
 
     this.audio.addEventListener(
-  "loadedmetadata",
-  () => {
-    this.duration.textContent =
-      `0:00 / ${this.format(this.audio.duration)}`;
-  },
-  { once: true }
-);
+      "loadedmetadata",
+      () => {
+        this.duration.textContent = `0:00 / ${this.format(this.audio.duration)}`;
+      },
+      { once: true },
+    );
   }
-
 
   // This function will return the status of the current audio element play or paused
   getStatus() {
@@ -145,11 +130,8 @@ async play() {
     return [this.songName, this.songURL];
   }
 
-
   //This function will change the volume
   async changeVolume(newVolume) {
-
-    
     if (this.isProcessing) return;
     try {
       this.isProcessing = true;
@@ -172,18 +154,21 @@ async play() {
     }
   }
 
-
-
   //This function will return the current volume
-  getVolume(){
+  getVolume() {
     return this.audio.volume;
   }
+
+  //This function will handle the change current time
+  changeCurrentTime(newTime) {
+    this.audio.currentTime = newTime;
+  }
+
+  //This function will return the current duration
+  getDuration() {
+    return this.audio.duration;
+  }
 }
-
-
-
-
-
 
 // Single song card template
 let singleSongCardTemplate = ` <!-- Single song card -->
@@ -285,7 +270,6 @@ export let displayFolderSongs = async (
   });
 
   currentSong.changeTrack(songsList[0]);
-  
 };
 
 // Single playlist card template
@@ -448,5 +432,89 @@ export let sidebarOpenCloseEventHandling = async (
   closeSidebarElement.addEventListener("click", (e) => {
     document.querySelector(".left").classList.add("hidden");
     document.querySelector(".right").classList.remove("hidden");
+  });
+};
+
+// This playbarEventHandling function will handle playbar related events like play pause seek duration etc
+export let playbarEventHandling = async (
+  songName,
+  previousButton,
+  playPauseButton,
+  nextButton,
+  currentSong,
+  songList,
+  volumeImage,
+  volumeRange,
+  seekbarTrack,
+  seekbarPointer,
+) => {
+  // Adding Eventlistner to the playPauseButton
+  playPauseButton.addEventListener("click", async (e) => {
+    let songStatus = currentSong.getStatus();
+
+    if (songStatus === "paused") {
+      await currentSong.play();
+      console.log("song playing");
+    } else {
+      currentSong.pause();
+    }
+  });
+
+  // Adding Eventlistner to the previousButton
+  previousButton.addEventListener("click", async (e) => {
+    await currentSong.pause();
+
+    for (const [index, item] of songList.entries()) {
+      if (item[0] == currentSong.getDetails()[0] && index >= 1) {
+        currentSong.changeTrack(songList[index - 1]);
+        await currentSong.play();
+        break;
+      }
+    }
+  });
+
+  // Adding Eventlistner to the nextButton
+  nextButton.addEventListener("click", async (e) => {
+    await currentSong.pause();
+
+    for (const [index, item] of songList.entries()) {
+      if (
+        item[0] == currentSong.getDetails()[0] &&
+        index < songList.length - 1
+      ) {
+        currentSong.changeTrack(songList[index + 1]);
+        await currentSong.play();
+        break;
+      }
+    }
+  });
+
+  // Adding Eventlistner to the volumeRange
+  volumeRange.addEventListener("input", async (e) => {
+    await currentSong.changeVolume(e.target.value / 100);
+  });
+
+  // Adding Eventlistner to the volumeImage
+  volumeImage.addEventListener("click", async (e) => {
+    if (currentSong.getVolume() == 0) {
+      await currentSong.changeVolume(0.2);
+      volumeRange.value = 20;
+    } else {
+      await currentSong.changeVolume(0);
+      volumeRange.value = 0;
+    }
+  });
+
+  //Adding event listner to the seekbar track and seekbar pointer
+  seekbarTrack.addEventListener("click", (e) => {
+    let rect = e.currentTarget.getBoundingClientRect();
+
+    let clickX = e.clientX - rect.left;
+
+    let percent = (clickX / rect.width) * 100;
+
+    seekbarPointer.style.left = `${percent}%`;
+
+    currentSong.changeCurrentTime((currentSong.getDuration() * percent) / 100);
   });
 };

@@ -2,6 +2,7 @@ import {
   displayPlaylists,
   sidebarOpenCloseEventHandling,
   CurrentSong,
+  playbarEventHandling,
 } from "./utilities.js";
 
 let els = {
@@ -15,6 +16,8 @@ let els = {
   nextButton: document.querySelector(".play-buttons .next > img"),
   volumeImage: document.querySelector(".volume-image-container > img"),
   volumeRange: document.querySelector(".volume-range > input"),
+  seekbarTrack: document.querySelector(".seekbar-track"),
+  seekbarPointer: document.querySelector(".seekbar-pointer"),
 
   basePath: "http://127.0.0.1:3000/src",
 
@@ -23,6 +26,8 @@ let els = {
 
 async function onLoad() {
   let currentSong = new CurrentSong();
+
+  //Displaying all playlists
 
   await displayPlaylists(
     "playlists",
@@ -36,113 +41,7 @@ async function onLoad() {
   //Adding the event listner to the handburger to open and close the sidebar
   sidebarOpenCloseEventHandling(els.hamburger, els.closeSidebar);
 
-  // This playbarEventHandling function will handle playbar related events like play pause seek duration etc
-  let playbarEventHandling = async (
-    songName,
-    previousButton,
-    playPauseButton,
-    nextButton,
-    currentSong,
-    songList,
-    volumeImage,
-    volumeRange,
-  ) => {
-    // Adding Eventlistner to the playPauseButton
-    playPauseButton.addEventListener("click", async (e) => {
-      let songStatus = currentSong.getStatus();
-
-      if (songStatus === "paused") {
-        await currentSong.play();
-        console.log("song playing");
-      } else {
-        currentSong.pause();
-      }
-    });
-
-    // Adding Eventlistner to the previousButton
-    previousButton.addEventListener("click", async (e) => {
-      await currentSong.pause();
-
-      for (const [index, item] of songList.entries()) {
-        if (item[0] == currentSong.getDetails()[0] && index >= 1) {
-          currentSong.changeTrack(songList[index - 1]);
-          await currentSong.play();
-          break;
-        }
-      }
-    });
-
-
-
-    // Adding Eventlistner to the nextButton
-    nextButton.addEventListener("click", async (e) => {
-      await currentSong.pause();
-
-      for (const [index, item] of songList.entries()) {
-        if (
-          item[0] == currentSong.getDetails()[0] &&
-          index < songList.length - 1
-        ) {
-          currentSong.changeTrack(songList[index + 1]);
-          await currentSong.play();
-          break;
-        }
-      }
-    });
-
-
-
-    // Adding Eventlistner to the volumeRange
-    volumeRange.addEventListener("input", async (e) => {
-          await currentSong.changeVolume(e.target.value/100);
-    });
-    
-    
-    // Adding Eventlistner to the volumeImage
-    volumeImage.addEventListener("click", async (e) => {
-        if (currentSong.getVolume() == 0) {
-          await currentSong.changeVolume(0.2)
-          volumeRange.value = 20;
-        }
-        else{
-          
-          await currentSong.changeVolume(0)
-          volumeRange.value = 0;
-
-        }
-
-
-          
-          
-    });
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  };
-
+  //Handling events of playbar
   await playbarEventHandling(
     els.songName,
     els.previousButton,
@@ -152,6 +51,8 @@ async function onLoad() {
     els.songList,
     els.volumeImage,
     els.volumeRange,
+    els.seekbarTrack,
+    els.seekbarPointer,
   );
 }
 
