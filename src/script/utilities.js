@@ -9,6 +9,8 @@ export class CurrentSong {
     // LOCK
     this.isProcessing = false;
 
+
+    //Getting DOM elements
     this.songNameElement = document.querySelector(".song-name > p");
     this.volumeImageElement = document.querySelector(
       ".volume-image-container > img",
@@ -17,9 +19,48 @@ export class CurrentSong {
     this.playPauseButtonElement = document.querySelector(
       ".play-buttons .play-pause > img",
     );
+
+    this.duration = document.querySelector(".song-duration-container");
+
+
+
+
+    
+   
+
+    
+
+
+    //Adding a time update event listner to track the duration
+  this.audio.addEventListener("timeupdate", (event) => { 
+
+
+    this.duration.textContent = `${this.format(this.audio.currentTime)} / ${this.format(this.audio.duration)}`;
+})
+
+
+
+
   }
 
-  async play() {
+
+
+  //This function will format the  timestamp to 00:00/00:00 format
+ format(time) {
+  if (isNaN(time)) return "0:00";
+
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60)
+    .toString()
+    .padStart(2, "0");
+
+  return `${minutes}:${seconds}`;
+}
+
+
+  
+//This function will play the current song
+async play() {
     // Prevent overlapping execution
     if (this.isProcessing) return;
 
@@ -37,6 +78,8 @@ export class CurrentSong {
     }
   }
 
+
+  //This function will pause the current song
   async pause() {
     // Prevent overlapping execution
     if (this.isProcessing) return;
@@ -55,6 +98,8 @@ export class CurrentSong {
     }
   }
 
+
+  // This function will toggle the play and pause
   async togglePlayPause() {
     if (this.isProcessing) return;
 
@@ -65,6 +110,8 @@ export class CurrentSong {
     }
   }
 
+
+  // This function will change the track of audio
   changeTrack(track) {
     // Optional safety
     if (this.isProcessing) return;
@@ -75,12 +122,25 @@ export class CurrentSong {
     this.audio.src = this.songURL;
 
     this.songNameElement.textContent = this.songName;
+    this.audio.load();
+
+    this.audio.addEventListener(
+  "loadedmetadata",
+  () => {
+    this.duration.textContent =
+      `0:00 / ${this.format(this.audio.duration)}`;
+  },
+  { once: true }
+);
   }
 
+
+  // This function will return the status of the current audio element play or paused
   getStatus() {
     return this.audio.paused ? "paused" : "playing";
   }
 
+  // This function will return the song name and song url of current song
   getDetails() {
     return [this.songName, this.songURL];
   }
@@ -114,11 +174,16 @@ export class CurrentSong {
 
 
 
-  //This function will return the volume
+  //This function will return the current volume
   getVolume(){
     return this.audio.volume;
   }
 }
+
+
+
+
+
 
 // Single song card template
 let singleSongCardTemplate = ` <!-- Single song card -->
@@ -220,7 +285,7 @@ export let displayFolderSongs = async (
   });
 
   currentSong.changeTrack(songsList[0]);
-  console.log(songsList[0]);
+  
 };
 
 // Single playlist card template
